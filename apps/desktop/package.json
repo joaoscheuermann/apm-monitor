@@ -6,10 +6,12 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "webpack -p",
+    "build": "webpack --mode=production",
     "dev": "webpack --mode=development",
     "start": "qode ./dist/index.js",
-    "debug": "qode --inspect ./dist/index.js"
+    "debug": "qode --inspect ./dist/index.js",
+    "deploy": "npm run build && npx nodegui-packer --pack ./dist",
+    "postdeploy": "node ./scripts/copy_bin.js"
   },
   "dependencies": {
     "@nodegui/react-nodegui": "^0.13.0",

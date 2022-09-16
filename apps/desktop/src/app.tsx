@@ -1,32 +1,36 @@
-import { Text, Window, hot, View, Tabs, TabItem, Button } from "@nodegui/react-nodegui";
-
-import React, { useEffect, useMemo, useState } from "react";
-
+import path from "path";
 import { EventEmitter } from "events";
-import { defaultContainerStyle, defaultSectionStyle } from "./style/style";
+import React, { useMemo } from "react";
+import { Window, hot, View, Tabs, TabItem } from "@nodegui/react-nodegui";
+
+import { ChildProcessManager } from "./utils";
+import { defaultContainerStyle } from "./style/style";
+
 import Separator from "./components/Separator";
 import APMSection from "./components/APMSection";
-import { APMChannelEvents, APMMonitor } from "./monitor";
+import { APMChannelEvents } from "./types";
 
-const APP_TITLE = "APM Monitor"
+const APP_TITLE = "APM Monitor";
 const APP_SIZE = { width: 300, height: 420 };
 
-function App () {
-  const channel = useMemo(() => new EventEmitter(), [])
+const BIN_PATH = process.env.NODE_ENV === "production"
+    ? path.join(__dirname, './bin')
+    : path.join(__dirname, "../bin");
+
+const SERVER_BIN_PATH = path.join(BIN_PATH, "server.exe");
+const MONITOR_BIN_PATH = path.join(BIN_PATH, "monitor.exe");
+
+function App() {
+  const channel = useMemo(() => new EventEmitter(), []);
+  const monitor = useMemo(() => new ChildProcessManager(MONITOR_BIN_PATH, channel, __dirname), []);
 
   return (
-    <Window
-      minSize={APP_SIZE}
-      maxSize={APP_SIZE}
-      windowTitle={APP_TITLE}
-    >
+    <Window minSize={APP_SIZE} maxSize={APP_SIZE} windowTitle={APP_TITLE}>
       <Tabs style="flex: 1;">
         <TabItem title="APM">
-          <View
-            style={defaultContainerStyle}
-          >
+          <View style={defaultContainerStyle}>
             <APMSection
-              title="Combined"
+              title="Combined (keyboard + mouse)"
               property="combined"
               channel={channel}
               event={APMChannelEvents.UPDATE}
@@ -52,14 +56,11 @@ function App () {
         </TabItem>
 
         <TabItem title="Streaming">
-          <View
-            style={defaultContainerStyle}
-          >
-          </View>
+          <View style={defaultContainerStyle}></View>
         </TabItem>
       </Tabs>
     </Window>
-  )
+  );
 }
 
 export default hot(App);

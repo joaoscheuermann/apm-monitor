@@ -57,7 +57,7 @@ export class APMMonitor {
 
   generatePayload (): APMPayload {
     function avg(a: number, b: number) {
-      return Math.round(a / b || 0);
+      return Math.round((a / b) || 0);
     }
 
     const payload: APMPayload = {
@@ -96,12 +96,11 @@ export class APMMonitor {
     // highest APM
     setInterval(() => {
       this.elapsedMinutes++;
+      this.totalClicks += this.clicks;
+      this.totalKeydowns += this.keydowns;
 
       if (this.clicks > this.topClicks) this.topClicks = this.clicks;
       if (this.keydowns > this.topKeydowns) this.topKeydowns = this.keydowns;
-
-      this.totalClicks += this.clicks;
-      this.totalKeydowns += this.keydowns;
 
       this.clicks = 0;
       this.keydowns = 0;

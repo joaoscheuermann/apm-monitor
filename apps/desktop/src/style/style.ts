@@ -27,4 +27,6 @@ export const defaultLabeledValueLabelStyle = `
   margin-right: 2px;
 `
 
-export const defaultLabeledValueValueStyle = ``
+export const defaultLabeledValueValueStyle = `
+  width: 100%;
+`

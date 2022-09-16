@@ -15,9 +15,7 @@ export default function LabeledValue ({ label, children, ...props }: LabeledValu
       <Text style={defaultLabeledValueLabelStyle}>
         {label}
       </Text>
-      <Text style={defaultLabeledValueValueStyle}>
-        {children}
-      </Text>
+      <Text style={defaultLabeledValueValueStyle} children={children} />
     </View>
   )
 }
