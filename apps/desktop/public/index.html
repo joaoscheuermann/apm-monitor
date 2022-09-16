@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APM Monitor</title>
+
+  <script src="https://cdn.socket.io/4.5.0/socket.io.min.js" integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k" crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      --color-white: #ffffff;
+      --font-size-medium: 20px;
+      --font-size-small: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+
+      padding: 0;
+      margin: 0;
+
+      font-family: Arial, sans-serif;
+
+      user-select: none;
+    }
+
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      width: 200px;
+      background-color: var(--color-white);
+      border: 2px solid black;
+    }
+
+    .wrapper > .header {
+      padding: 4px;
+      border-bottom: 2px solid black;
+      font-size: var(--font-size-medium);
+      font-weight: bold;
+    }
+
+    .wrapper > .body {
+      height: 100%;
+    }
+
+    .item {
+      display: flex;
+      padding: 6px 8px;
+      font-size: var(--font-size-small);
+    }
+
+    .item:not(:last-child) {
+      border-bottom: 1px solid black;
+    }
+
+    .item > .label {
+      font-weight: bold;
+      margin-right: 8px;
+    }
+
+    .item > .value {
+      font-weight: bold;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">APM Monitor</div>
+    <div class="body">
+
+      <div class="item">
+        <div class="label">CRT:</div>
+        <div class="value" id="crt">0</div>
+      </div>
+
+      <div class="item">
+        <div class="label">AVG:</div>
+        <div class="value" id="avg">0</div>
+      </div>
+
+      <div class="item">
+        <div class="label">TOP:</div>
+        <div class="value" id="top">0</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    var socket = io();
+
+    socket.on('apm:update', payload => {
+      const { combined } = payload
+      const { current, highest, average } = combined
+
+      document.getElementById('crt').innerText = current
+      document.getElementById('avg').innerText = average
+      document.getElementById('top').innerText = highest
+    })
+  </script>
+</body>
+</html>

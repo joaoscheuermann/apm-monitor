@@ -1,6 +1,6 @@
 import path from "path";
 import { EventEmitter } from "events";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Window, hot, View, Tabs, TabItem } from "@nodegui/react-nodegui";
 
 import { ChildProcessManager } from "./utils";
@@ -20,9 +20,23 @@ const BIN_PATH = process.env.NODE_ENV === "production"
 const SERVER_BIN_PATH = path.join(BIN_PATH, "server.exe");
 const MONITOR_BIN_PATH = path.join(BIN_PATH, "monitor.exe");
 
+const STATIC_FILES_PATH = process.env.NODE_ENV === "production"
+  ? path.join(__dirname, "./public")
+  : path.join(__dirname, "../public")
+
 function App() {
   const channel = useMemo(() => new EventEmitter(), []);
+
+  const server = useMemo(() => new ChildProcessManager(SERVER_BIN_PATH, channel, __dirname), []);
   const monitor = useMemo(() => new ChildProcessManager(MONITOR_BIN_PATH, channel, __dirname), []);
+
+  useEffect(() => {
+    server.start(['8080', STATIC_FILES_PATH])
+    monitor.start()
+
+    // Pipe the messages from the monitor to the server
+    monitor.process?.on('message', message => server.process?.send(message))
+  }, [server, monitor])
 
   return (
     <Window minSize={APP_SIZE} maxSize={APP_SIZE} windowTitle={APP_TITLE}>

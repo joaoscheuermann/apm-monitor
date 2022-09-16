@@ -15,12 +15,28 @@ function copyRecursiveSync (src, dest) {
   }
 };
 
-const src = path.join(__dirname, '..', 'bin')
-const dest = path.join(__dirname, '..', 'deploy', 'win32', 'build', 'apm-monitor', 'dist', 'bin')
 
-console.log('Copying bin folder to build folder')
+function copyBin () {
+  const src = path.join(__dirname, '..', 'bin')
+  const dest = path.join(__dirname, '..', 'deploy', 'win32', 'build', 'apm-monitor', 'dist', 'bin')
 
-copyRecursiveSync(src, dest)
+  console.log('Copying bin folder to build folder')
 
-console.log('Done!')
+  copyRecursiveSync(src, dest)
 
+  console.log('Done!')
+}
+
+function copyPublic () {
+  const src = path.join(__dirname, '..', 'public')
+  const dest = path.join(__dirname, '..', 'deploy', 'win32', 'build', 'apm-monitor', 'dist', 'public')
+
+  console.log('Copying public folder to build folder')
+
+  copyRecursiveSync(src, dest)
+
+  console.log('Done!')
+}
+
+copyBin()
+copyPublic()

@@ -10,25 +10,37 @@ export class ChildProcessManager {
     public processPath: string,
     public channel: EventEmitter,
     public cwd: string = __dirname
-  ) {
-    this.start()
-  }
+  ) {}
 
   start (commands: string[] = []) {
     if (this.process) return
 
     const options: SpawnOptions = {
       cwd: this.cwd,
-      stdio: ["inherit", "inherit", "inherit", "ipc"],
+      stdio: ["pipe", "pipe", "pipe", "ipc"],
     }
 
-    const process = spawn(this.processPath, commands, options)
+    const child = spawn(this.processPath, commands, options)
 
-    process.on('message', ({type, payload}: LooseObject) => {
+    child?.stdout?.setEncoding('utf8');
+    child?.stdout?.on('data', function(data) {
+        //Here is where the output goes
+
+        console.log('stdout: ' + data.toString());
+    });
+
+    child?.stderr?.setEncoding('utf8');
+    child?.stderr?.on('data', function(data) {
+        //Here is where the error output goes
+
+        console.log('stderr: ' + data.toString());
+    });
+
+    child.on('message', ({type, payload}: LooseObject) => {
       this.channel.emit(type, payload)
     })
 
-    this.process = process
+    this.process = child
   }
 
   stop () {
