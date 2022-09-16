@@ -33,6 +33,7 @@ export class WebSocketServer {
   }
 
   stop () {
+    console.log('Server closed!')
     this.server.close()
     this.channel.emit('server:stoped')
   }

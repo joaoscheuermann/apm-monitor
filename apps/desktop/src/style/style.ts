@@ -1,11 +1,14 @@
 export const defaultContainerStyle = `
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   padding: 8px;
 `
 
 export const defaultSectionStyle = `
   padding: 8px;
   padding-bottom: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.20);
 `
 
 export const defaultTitleBodyStyle = `

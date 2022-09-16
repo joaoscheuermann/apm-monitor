@@ -1,5 +1,6 @@
+import util from "util";
 import EventEmitter from "events";
-import { ChildProcess, spawn, SpawnOptions } from "child_process";
+import { ChildProcess, spawn, SpawnOptions, spawnSync } from "child_process";
 import { LooseObject } from "../types";
 
 
@@ -24,16 +25,12 @@ export class ChildProcessManager {
 
     child?.stdout?.setEncoding('utf8');
     child?.stdout?.on('data', function(data) {
-        //Here is where the output goes
-
-        console.log('stdout: ' + data.toString());
+      console.log('stdout: ' + data.toString());
     });
 
     child?.stderr?.setEncoding('utf8');
     child?.stderr?.on('data', function(data) {
-        //Here is where the error output goes
-
-        console.log('stderr: ' + data.toString());
+      console.log('stderr: ' + data.toString());
     });
 
     child.on('message', ({type, payload}: LooseObject) => {
@@ -50,4 +47,8 @@ export class ChildProcessManager {
     this.process.kill()
     this.process = null
   }
+}
+
+export function copyToClipBoard (buffer: Buffer) {
+  spawn('clip').stdin.end(buffer);
 }
