@@ -5,7 +5,7 @@ import Section from "../Section"
 import Separator from "../Separator"
 import LabeledValue from "../LabeledValue"
 
-import { APMChannelEvents, APMPayload, APMPropertyPayload, createAPMPropertyPayload } from "../../monitor"
+import { APMChannelEvents, APMPayload, APMPropertyPayload, createAPMMonitorPropertyPayload } from "../../monitor"
 
 interface APMSectionProps {
   title: string,
@@ -15,7 +15,7 @@ interface APMSectionProps {
 }
 
 export default function APMSection ({ title, property: key, channel, event, ...props }: APMSectionProps) {
-  const [{ current, highest, average }, setCurrentPayload] = useState<APMPropertyPayload>(createAPMPropertyPayload(0, 0, 0))
+  const [{ current, highest, average }, setCurrentPayload] = useState<APMPropertyPayload>(createAPMMonitorPropertyPayload(0, 0, 0))
 
   useEffect(() => {
     console.log(title, 'initialized')
@@ -23,7 +23,7 @@ export default function APMSection ({ title, property: key, channel, event, ...p
     function handler (payload: APMPayload) {
       const property = payload[key]
 
-      setCurrentPayload(property || createAPMPropertyPayload(0, 0, 0))
+      setCurrentPayload(property || createAPMMonitorPropertyPayload(0, 0, 0))
     }
 
     channel.on('apm:update', handler)

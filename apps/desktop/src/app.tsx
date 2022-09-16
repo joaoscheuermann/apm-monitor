@@ -1,29 +1,18 @@
 import { Text, Window, hot, View, Tabs, TabItem, Button } from "@nodegui/react-nodegui";
 
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import { EventEmitter } from "events";
 import { defaultContainerStyle, defaultSectionStyle } from "./style/style";
-import Section from "./components/Section";
 import Separator from "./components/Separator";
-import LabeledValue from "./components/LabeledValue";
 import APMSection from "./components/APMSection";
-import { APMChannelEvents } from "./monitor";
+import { APMChannelEvents, APMMonitor } from "./monitor";
 
 const APP_TITLE = "APM Monitor"
 const APP_SIZE = { width: 300, height: 420 };
 
-const channel = new EventEmitter()
-
 function App () {
-
-  const [topValue, setTopValue] = useState(0)
-
-  const buttonHandler = {
-    clicked: () => {
-      setTopValue(state => state + 1)
-    }
-  };
+  const channel = useMemo(() => new EventEmitter(), [])
 
   return (
     <Window
