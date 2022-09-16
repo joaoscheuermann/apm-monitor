@@ -9,12 +9,6 @@
   <script src="https://cdn.socket.io/4.5.0/socket.io.min.js" integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k" crossorigin="anonymous"></script>
 
   <style>
-    :root {
-      --color-white: #ffffff;
-      --font-size-medium: 20px;
-      --font-size-small: 16px;
-    }
-
     * {
       box-sizing: border-box;
 
@@ -22,68 +16,57 @@
       margin: 0;
 
       font-family: Arial, sans-serif;
+      font-size: 12px;
 
       user-select: none;
     }
 
     .wrapper {
+      margin: 4px;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       width: 200px;
-      background-color: var(--color-white);
-      border: 2px solid black;
+      background-color: #ffffff;
+      padding: 6px 6px 8px 6px;
+      border: 1px solid rgba(0, 0, 0, 0.3);
+      /* offset-x | offset-y | blur-radius | spread-radius | color */
+      box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.2), 0px 0px 4px 1px rgba(0, 0, 0, 0.1);
     }
 
-    .wrapper > .header {
-      padding: 4px;
-      border-bottom: 2px solid black;
-      font-size: var(--font-size-medium);
-      font-weight: bold;
-    }
-
-    .wrapper > .body {
-      height: 100%;
+    .wrapper > .body > * {
+      margin-top: 4px;
     }
 
     .item {
       display: flex;
-      padding: 6px 8px;
-      font-size: var(--font-size-small);
     }
 
-    .item:not(:last-child) {
-      border-bottom: 1px solid black;
+    .item > :not(:first-child) {
+      margin-left: 2px;
     }
 
     .item > .label {
       font-weight: bold;
-      margin-right: 8px;
-    }
-
-    .item > .value {
-      font-weight: bold;
-      color: red;
     }
   </style>
 </head>
 <body>
   <div class="wrapper">
-    <div class="header">APM Monitor</div>
+    <div class="header">APM (keyboard + mouse)</div>
     <div class="body">
-
       <div class="item">
-        <div class="label">CRT:</div>
+        <div class="label">Current:</div>
         <div class="value" id="crt">0</div>
       </div>
 
       <div class="item">
-        <div class="label">AVG:</div>
+        <div class="label">Average:</div>
         <div class="value" id="avg">0</div>
       </div>
 
       <div class="item">
-        <div class="label">TOP:</div>
+        <div class="label">Highest:</div>
         <div class="value" id="top">0</div>
       </div>
     </div>
